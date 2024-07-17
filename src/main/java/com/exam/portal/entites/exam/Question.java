@@ -8,7 +8,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 
 @Entity
 @Table(name="question")
@@ -16,10 +15,11 @@ public class Question {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="question_id")
-	private Long quesid;
+	private Long id;
+	
 	@Column(length=5000)
 	private String content;
+	
 	private String image;
 	
 	private String option1;
@@ -31,12 +31,6 @@ public class Question {
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Quiz quiz;
-	
-	@Transient
-	private String choosedAnswer;
-	
-	@Transient
-	private String defaultUserId;
 	
 	public Question(String content, String image, String option1, String option2, String option3, String option4, String answer) {
 		this.content = content;
@@ -50,12 +44,12 @@ public class Question {
 
 	public Question() {}
 
-	public Long getQuesid() {
-		return quesid;
+	public Long getId() {
+		return id;
 	}
 
-	public void setQuesid(Long quesid) {
-		this.quesid = quesid;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getContent() {
@@ -117,23 +111,8 @@ public class Question {
 	public String getAnswer() {
 		return answer;
 	}
+	
 	public void setAnswer(String answer) {
 		this.answer = answer;
-	}
-
-	public String getChoosedAnswer() {
-		return choosedAnswer;
-	}
-
-	public void setChoosedAnswer(String choosedAnswer) {
-		this.choosedAnswer = choosedAnswer;
-	}
-
-	public String getDefaultUserId() {
-		return defaultUserId;
-	}
-
-	public void setDefaultUser(String defaultUserId) {
-		this.defaultUserId = defaultUserId;
 	}
 }

@@ -1,6 +1,6 @@
 package com.exam.portal.entites.exam;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import com.exam.portal.entites.User;
 
@@ -19,21 +19,23 @@ public class Result {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="result_id")
 	long id;
+	
 	private String correct;
+	
 	private String attempted;
+	
 	private double mark;
 	
 	@Column(name="create_date")
-	private Date createDate = new Date();
+	private LocalDateTime createDate;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	private User user;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Quiz quiz;
-
+	
 	public long getId() {
 		return id;
 	}
@@ -82,11 +84,11 @@ public class Result {
 		this.quiz = quiz;
 	}
 
-	public Date getCreateDate() {
+	public LocalDateTime getCreateDate() {
 		return createDate;
 	}
 
-	public void setCreateDate(Date createDate) {
+	public void setCreateDate(LocalDateTime createDate) {
 		this.createDate = createDate;
 	}
 

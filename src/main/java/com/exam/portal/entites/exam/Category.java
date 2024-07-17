@@ -19,8 +19,10 @@ public class Category {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long cid;
+	private Long id;
+
 	private String title;
+	
 	private String description;
 	
 	@OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
@@ -35,12 +37,12 @@ public class Category {
 		this.description = description;
 	}
 
-	public Long getCid() {
-		return cid;
+	public Long getId() {
+		return id;
 	}
 
-	public void setCid(Long cid) {
-		this.cid = cid;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getTitle() {

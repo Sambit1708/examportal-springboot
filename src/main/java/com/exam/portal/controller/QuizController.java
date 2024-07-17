@@ -5,12 +5,14 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,12 +35,17 @@ public class QuizController {
 	
 	@PostMapping("/add-quiz")
 	public ResponseEntity<Quiz> add(@RequestBody Quiz quiz) {
-		return ResponseEntity.ok(this.quizService.addQuiz(quiz));
+		return new ResponseEntity<>(this.quizService.addQuiz(quiz), HttpStatus.CREATED);
 	}
 	
-	@PostMapping("/update-quiz")
-	public ResponseEntity<Quiz> update(@RequestBody Quiz quiz) {
-		return ResponseEntity.ok(this.quizService.udateQuiz(quiz));
+	@PutMapping("/update-quiz/{quizId}")
+	public ResponseEntity<Quiz> update(	@PathVariable("quizId") Long quizId,
+										@RequestBody Quiz quiz) {
+		quiz = this.quizService.udateQuiz(quizId, quiz);
+		if(quiz == null) {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<Quiz>(quiz, HttpStatus.CREATED);
 	}
 	
 	@GetMapping("/{qid}")
@@ -66,15 +73,15 @@ public class QuizController {
 	}
 	
 	@GetMapping("/active")
-	public List<Quiz> getActiveQuiz() {
-		return this.quizService.getActiveQuizes();
+	public ResponseEntity<List<Quiz>> getActiveQuiz() {
+		return new ResponseEntity<>(this.quizService.getActiveQuizes(), HttpStatus.OK);
 	}
 	
 	@GetMapping("/category/active/{cid}")
 	public List<Quiz> getActiveQuizByCategory(@PathVariable("cid") Long cid) {
 
 		Category category = new Category();
-		category.setCid(cid);
+		category.setId(cid);
 		return this.quizService.getActiveQuizesOfCategory(category);
 	}
 }

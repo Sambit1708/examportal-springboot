@@ -7,12 +7,14 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,34 +38,29 @@ public class QuestionController {
 	
 	@PostMapping("/add-question")
 	public ResponseEntity<Question> add(@RequestBody Question question) {
-		return ResponseEntity.ok(this.questionService.addQuestion(question));
+		return new ResponseEntity<Question>(
+				this.questionService.addQuestion(question), HttpStatus.CREATED);
 	}
 	
-	@PostMapping("/update-question")
-	public ResponseEntity<Question> update(@RequestBody Question question) {
-		return ResponseEntity.ok(this.questionService.udateQuestion(question));
+	@PutMapping("/update-question/{quesId}")
+	public ResponseEntity<Question> update( @PathVariable("quesId") Long quesId, 
+											@RequestBody Question question) {
+		question = this.questionService.updateQuestion(quesId, question);
+		if(question == null) {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<>(question, HttpStatus.CREATED);
 	}
 	
 	@GetMapping("/{qestionid}")
-	public Question getQuestion(@PathVariable("qestionid") Long qid) {
-		return this.questionService.getQuestion(qid);
+	public ResponseEntity<?> getQuestion(@PathVariable("qestionid") Long qid) {
+		return new ResponseEntity<>(this.questionService.getQuestion(qid), HttpStatus.OK);
 	}
 	
 	@GetMapping("/quiz/{qid}")
 	public ResponseEntity<?> getQuestionsOfQuiz(@PathVariable("qid") Long qid) {
-		
-		Quiz quiz = this.quizService.getQuiz(qid);
-		Set<Question> questions = quiz.getQuestions();
-		List<Question> list = new ArrayList<>(questions);
-		if(list.size() > Integer.parseInt(quiz.getNoOfQuestions())) {
-			list = list.subList(0, Integer.parseInt(quiz.getNoOfQuestions() + 1));
-		}
-		
-		list.forEach((q) -> {
-			q.setAnswer("");
-		});
-		
-		Collections.shuffle(Arrays.asList(list));
+
+		List<Question> list = this.questionService.getQuestionByQuiz(qid);
 		return ResponseEntity.ok(list);
 	}
 	

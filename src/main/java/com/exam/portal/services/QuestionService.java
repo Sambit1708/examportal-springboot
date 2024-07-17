@@ -1,15 +1,15 @@
 package com.exam.portal.services;
 
+import java.util.List;
 import java.util.Set;
 
 import com.exam.portal.entites.exam.Question;
-import com.exam.portal.entites.exam.Quiz;
 
 public interface QuestionService {
 
 	public Question addQuestion(Question question);
 	
-	public Question udateQuestion(Question question);
+	public Question updateQuestion(Long questionId, Question question);
 	
 	public Set<Question> getQuestion();
 	
@@ -17,5 +17,5 @@ public interface QuestionService {
 	
 	public void deleteQuestion(Long questionId);
 	
-	public Set<Question> getQuestionByQuiz(Quiz quiz);
+	public List<Question> getQuestionByQuiz(Long quizId);
 }

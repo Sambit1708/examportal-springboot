@@ -2,6 +2,7 @@ package com.exam.portal.services.impl;
 
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,26 @@ public class QuizServiceImpl implements QuizService {
 	}
 
 	@Override
-	public Quiz udateQuiz(Quiz quiz) {
+	public Quiz udateQuiz(Long quizId, Quiz quizDto) {
+		Quiz quiz = this.getQuiz(quizId);
+		if(quiz == null) {
+			return quiz;
+		}
+		if(quizDto.getCategory() != null) {
+			quiz.setCategory(quizDto.getCategory());
+		}
+		if(!quizDto.getDescription().isEmpty()) {
+			quiz.setDescription(quizDto.getDescription());
+		}
+		if(!quizDto.getTitle().isEmpty()) {
+			quiz.setTitle(quizDto.getTitle());
+		}
+		if(!quizDto.getNoOfQuestions().isEmpty()) {
+			quiz.setNoOfQuestions(quizDto.getNoOfQuestions());
+		}
+		if(!quizDto.getMaxMark().isEmpty()) {
+			quiz.setMaxMark(quizDto.getMaxMark());
+		}
 		return this.quizRepository.save(quiz);
 	}
 
@@ -36,7 +56,11 @@ public class QuizServiceImpl implements QuizService {
 
 	@Override
 	public Quiz getQuiz(Long quizId) {
-		return this.quizRepository.findById(quizId).get();
+		Optional<Quiz> quiz = this.quizRepository.findById(quizId);
+		if(quiz.isEmpty()) {
+			return null;
+		}
+		return quiz.get();
 	}
 
 	@Override

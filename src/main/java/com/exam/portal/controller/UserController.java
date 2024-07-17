@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -42,7 +43,7 @@ public class UserController {
 
 	@PostMapping("/create-user")
 	@ResponseBody
-	public User createUser(@RequestBody User user) throws Exception {
+	public ResponseEntity<?> createUser(@RequestBody User user) throws Exception {
 
 		user.setPassword(this.passwordEncoder.encode(user.getPassword()));
 		Set<UserRole> userRoles = new HashSet<UserRole>();
@@ -52,7 +53,7 @@ public class UserController {
 		user.setProfile("default.png");
 		user = userService.createUser(user, userRoles);
 		
-		return user;
+		return new ResponseEntity<>(user, HttpStatus.CREATED);
 	}
 	
 	@GetMapping("/{username}")
@@ -67,8 +68,13 @@ public class UserController {
 	}
 	
 	@GetMapping("/")
-	public ResponseEntity<?> getALlUser() {
+	public ResponseEntity<?> getAllUser() {
 		return ResponseEntity.ok(this.userService.getAllUser());
+	}
+	
+	@GetMapping("/general")
+	public ResponseEntity<?> getAllNormalUser() {
+		return ResponseEntity.ok(this.userService.getNormalUsers());
 	}
 	
 	@PostMapping("/update-user")
@@ -78,6 +84,13 @@ public class UserController {
 		user1.setFirstName(user.getFirstName());
 		user1.setLastName(user.getLastName());
 		user1.setPhone(user.getPhone());
+		return this.userService.updateUser(user1);
+	}
+	
+	@PostMapping("/user-action")
+	public User UserAction(@RequestBody User user) {
+		User user1 = this.getUser(user.getUsername());
+		user1.setEnabled(user.isEnabled());
 		return this.userService.updateUser(user1);
 	}
 }

@@ -14,22 +14,25 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
 
 @Entity
-@Table(name="quiz")
 public class Quiz {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long qid;
+	private Long id;
+	
 	@Column(nullable = false)
 	private String title;
+	
 	private String description;
+	
 	@Column(name = "max_mark")
 	private String maxMark;
+	
 	@Column(name = "question_number")
 	private String noOfQuestions;
+	
 	private boolean active=false;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -54,12 +57,12 @@ public class Quiz {
 		this.active = active;
 	}
 
-	public Long getQid() {
-		return qid;
+	public Long getId() {
+		return id;
 	}
 
-	public void setQid(Long qid) {
-		this.qid = qid;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getTitle() {

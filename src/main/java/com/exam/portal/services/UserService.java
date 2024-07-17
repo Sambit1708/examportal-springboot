@@ -20,4 +20,6 @@ public interface UserService {
 	public List<User> getAllUser();
 	
 	public User updateUser(User user);
+	
+	public List<User> getNormalUsers();
 }
