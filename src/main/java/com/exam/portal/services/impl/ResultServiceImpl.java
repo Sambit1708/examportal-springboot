@@ -1,5 +1,6 @@
 package com.exam.portal.services.impl;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -41,7 +42,7 @@ public class ResultServiceImpl implements ResultService {
 		int noOfQues = Integer.parseInt(quiz.getNoOfQuestions());
 		int correct = 0;
 		int attempted = 0;
-		double mark = 0;
+		BigDecimal mark = new BigDecimal("0");
 		
 		for(int i=0; i<evalQuizDto.getQuestionAnswer().size(); i++) {
 			Question question = this.questionService.getQuestion(
@@ -50,7 +51,7 @@ public class ResultServiceImpl implements ResultService {
 			if(question.getAnswer() == evalQuizDto.getQuestionAnswer().get(0).getChoosedAnswer()) 
 			{
 				correct++;
-				mark += (maxMark / noOfQues);
+				mark.add(new BigDecimal(maxMark / noOfQues));
 			}
 
 			attempted++;

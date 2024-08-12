@@ -1,7 +1,8 @@
 package com.exam.portal.entites.exam;
 
-import java.time.LocalDateTime;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import com.exam.portal.entites.User;
 
 import jakarta.persistence.Column;
@@ -25,9 +26,10 @@ public class Result {
 	
 	private String attempted;
 	
-	private double mark;
+	@Column(precision = 8, scale=2)
+	private BigDecimal mark;
 	
-	@Column(name="create_date")
+	@Column(name = "create_date", columnDefinition = "DATETIME")
 	private LocalDateTime createDate;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -60,11 +62,11 @@ public class Result {
 		this.attempted = attempted;
 	}
 
-	public double getMark() {
+	public BigDecimal getMark() {
 		return mark;
 	}
 
-	public void setMark(double mark) {
+	public void setMark(BigDecimal mark) {
 		this.mark = mark;
 	}
 
@@ -94,7 +96,7 @@ public class Result {
 
 	public Result() {}
 
-	public Result(String correct, String attempted, double mark, User user, Quiz quiz) {
+	public Result(String correct, String attempted, BigDecimal mark, User user, Quiz quiz) {
 		this.correct = correct;
 		this.attempted = attempted;
 		this.mark = mark;
