@@ -28,7 +28,13 @@ public class QuestionServiceImpl implements QuestionService {
 
 	@Override
 	public Question addQuestion(Question question) {
-		return this.questionRepository.save(question);
+		Quiz quiz = this.quizService.getQuiz(question.getQuiz().getId());
+		String maxQuestion = quiz.getNoOfQuestions();
+		int totalQuestion = this.getQuestionByQuiz(question.getQuiz().getId()).size();
+		if(Integer.parseInt(maxQuestion) < totalQuestion ) {
+			return this.questionRepository.save(question);
+		}
+		return null;
 	}
 
 	@Override

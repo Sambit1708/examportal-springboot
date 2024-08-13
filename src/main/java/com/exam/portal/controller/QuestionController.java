@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.exam.portal.entites.exam.Question;
 import com.exam.portal.entites.exam.Quiz;
+import com.exam.portal.payload.ErrorCode;
 import com.exam.portal.services.QuestionService;
 import com.exam.portal.services.QuizService;
 
@@ -37,9 +38,13 @@ public class QuestionController {
 	
 	
 	@PostMapping("/add-question")
-	public ResponseEntity<Question> add(@RequestBody Question question) {
-		return new ResponseEntity<Question>(
-				this.questionService.addQuestion(question), HttpStatus.CREATED);
+	public ResponseEntity<?> add(@RequestBody Question question) {
+		Question questions = this.questionService.addQuestion(question);
+		if(questions == null) {
+			ErrorCode errorCode = new ErrorCode("Question must not exeed Max Number", "NOT FOUND (404)");
+			return new ResponseEntity<>(errorCode, HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity<Question>(questions, HttpStatus.CREATED);
 	}
 	
 	@PutMapping("/update-question/{quesId}")

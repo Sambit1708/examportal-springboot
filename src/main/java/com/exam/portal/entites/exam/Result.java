@@ -1,7 +1,5 @@
 package com.exam.portal.entites.exam;
 
-
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import com.exam.portal.entites.User;
 
@@ -26,8 +24,7 @@ public class Result {
 	
 	private String attempted;
 	
-	@Column(precision = 8, scale=2)
-	private BigDecimal mark;
+	private int mark;
 	
 	@Column(name = "create_date", columnDefinition = "DATETIME")
 	private LocalDateTime createDate;
@@ -62,11 +59,11 @@ public class Result {
 		this.attempted = attempted;
 	}
 
-	public BigDecimal getMark() {
+	public int getMark() {
 		return mark;
 	}
 
-	public void setMark(BigDecimal mark) {
+	public void setMark(int mark) {
 		this.mark = mark;
 	}
 
@@ -96,7 +93,7 @@ public class Result {
 
 	public Result() {}
 
-	public Result(String correct, String attempted, BigDecimal mark, User user, Quiz quiz) {
+	public Result(String correct, String attempted, int mark, User user, Quiz quiz) {
 		this.correct = correct;
 		this.attempted = attempted;
 		this.mark = mark;

@@ -1,6 +1,5 @@
 package com.exam.portal.services.impl;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -40,18 +39,18 @@ public class ResultServiceImpl implements ResultService {
 		Quiz quiz = this.quizService.getQuiz(evalQuizDto.getQuizId());
 		int maxMark = Integer.parseInt(quiz.getMaxMark());
 		int noOfQues = Integer.parseInt(quiz.getNoOfQuestions());
+		int mark = maxMark / noOfQues;
 		int correct = 0;
 		int attempted = 0;
-		BigDecimal mark = new BigDecimal("0");
 		
 		for(int i=0; i<evalQuizDto.getQuestionAnswer().size(); i++) {
 			Question question = this.questionService.getQuestion(
-										evalQuizDto.getQuestionAnswer().get(0).getQuestionId());
+										evalQuizDto.getQuestionAnswer().get(i).getQuestionId());
 		
-			if(question.getAnswer() == evalQuizDto.getQuestionAnswer().get(0).getChoosedAnswer()) 
+			String choodedOption = evalQuizDto.getQuestionAnswer().get(i).getChoosedAnswer();
+			if(choodedOption.equalsIgnoreCase(question.getAnswer())) 
 			{
 				correct++;
-				mark.add(new BigDecimal(maxMark / noOfQues));
 			}
 
 			attempted++;
@@ -60,7 +59,7 @@ public class ResultServiceImpl implements ResultService {
 		result.setAttempted(String.valueOf(attempted));
 		result.setCorrect(String.valueOf(correct));
 		result.setCreateDate(LocalDateTime.now());
-		result.setMark(mark);
+		result.setMark(mark * correct);
 		result.setUser(user);
 		result.setQuiz(quiz);
 		
